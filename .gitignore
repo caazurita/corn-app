@@ -1,0 +1,31 @@
+api/node_modules/
+api/dist/
+api/.env
+api/npm-debug.log
+api/yarn-error.log
+
+
+# Logs
+client-portal/logs
+client-portal/*.log
+client-portal/npm-debug.log*
+client-portal/yarn-debug.log*
+client-portal/yarn-error.log*
+client-portal/pnpm-debug.log*
+client-portal/lerna-debug.log*
+
+client-portal/node_modules
+client-portal/dist
+client-portal/dist-ssr
+client-portal/*.local
+
+# Editor directories and files
+client-portal/.vscode/*
+client-portal/!.vscode/extensions.json
+client-portal/.idea
+client-portal/.DS_Store
+client-portal/*.suo
+client-portal/*.ntvs*
+client-portal/*.njsproj
+client-portal/*.sln
+client-portal/*.sw?

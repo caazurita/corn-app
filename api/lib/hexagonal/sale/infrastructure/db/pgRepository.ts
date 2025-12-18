@@ -2,7 +2,6 @@ import { Sale } from "../../domain/Sale";
 import { SaleRepository } from "../../domain/SaleRepository";
 import { pool } from "../../../../../db";
 export class Repository implements SaleRepository {
-  sales: Sale[] = [];
   async create(sale: Sale): Promise<any> {
     await pool.query(
       "INSERT INTO sales (name, type, quantity, created_at) VALUES ($1, $2, $3, $4)",
@@ -19,6 +18,32 @@ export class Repository implements SaleRepository {
     if (!sale) {
       return null;
     }
-    return new Sale(sale.name, sale.type, sale.quantity, sale.created_at);
+    return new Sale(sale.name, sale.type, sale.quantity, 0, sale.created_at);
+  }
+
+  async getTotalSales(): Promise<Sale[] | []> {
+    const result = await pool.query(
+      `SELECT type, SUM(quantity) as sold
+       FROM sales
+       GROUP BY type
+       ORDER BY sold DESC`
+    );
+    if (result.rows.length === 0) {
+      return [];
+    }
+    console.log(result.rows);
+    const sales: Sale[] = [];
+    for (const row of result.rows) {
+      sales.push(
+        new Sale(
+          "corn",
+          row.type,
+          parseInt(row.sold),
+          parseInt(row.sold),
+          new Date()
+        )
+      );
+    }
+    return sales;
   }
 }
