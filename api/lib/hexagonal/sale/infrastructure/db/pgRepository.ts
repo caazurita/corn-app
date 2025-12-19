@@ -1,5 +1,5 @@
 import { Sale } from "../../domain/Sale";
-import { SaleRepository } from "../../domain/SaleRepository";
+import { SaleRepository, TotalSale } from "../../domain/SaleRepository";
 import { pool } from "../../../../../db";
 export class Repository implements SaleRepository {
   async create(sale: Sale): Promise<any> {
@@ -18,10 +18,10 @@ export class Repository implements SaleRepository {
     if (!sale) {
       return null;
     }
-    return new Sale(sale.name, sale.type, sale.quantity, 0, sale.created_at);
+    return new Sale(sale.name, sale.type, sale.quantity, sale.created_at);
   }
 
-  async getTotalSales(): Promise<Sale[] | []> {
+  async getTotalSales(): Promise<TotalSale[] | []> {
     const result = await pool.query(
       `SELECT type, SUM(quantity) as sold
        FROM sales
@@ -31,19 +31,17 @@ export class Repository implements SaleRepository {
     if (result.rows.length === 0) {
       return [];
     }
-    console.log(result.rows);
-    const sales: Sale[] = [];
+    const totalSale: TotalSale[] = [];
     for (const row of result.rows) {
-      sales.push(
-        new Sale(
-          "corn",
-          row.type,
-          parseInt(row.sold),
-          parseInt(row.sold),
-          new Date()
-        )
-      );
+      const newSale: TotalSale = {
+        name: "corn",
+        type: row.type,
+        quantity: 0,
+        sold: parseInt(row.sold),
+        createdAt: new Date(),
+      };
+      totalSale.push(newSale);
     }
-    return sales;
+    return totalSale;
   }
 }

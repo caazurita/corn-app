@@ -1,8 +1,8 @@
 import { NextFunction, Request, response, Response } from "express";
-import { CreateSale } from "../../app/create/createSale";
+import { CreateSale } from "../../application/create/createSale";
 import { Repository } from "../db/pgRepository";
 import { SaleTooManyRequestError } from "../../domain/SaleTooManyRequestError";
-import { GetTotalSale } from "../../app/get/getTotalSale";
+import { GetTotalSale } from "../../application/get/getTotalSale";
 
 const repository = new Repository();
 
